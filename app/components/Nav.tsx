@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import ThemeToggle from './ThemeToggle'
+import LangToggle from './LangToggle'
 
 const navLinks = [
   { href: '/blog', label: 'Blog' },
@@ -40,7 +41,8 @@ export default function Nav() {
               </Link>
             )
           })}
-          <div className="ml-2 pl-2 border-l border-[var(--border)]">
+          <div className="ml-2 pl-2 border-l border-[var(--border)] flex items-center gap-1">
+            <LangToggle />
             <ThemeToggle />
           </div>
         </div>

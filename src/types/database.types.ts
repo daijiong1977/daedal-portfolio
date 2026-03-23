@@ -17,9 +17,12 @@ export type Database = {
       about: {
         Row: {
           bio: string
+          bio_cn: string
           contact_email: string
           experience: Json
+          experience_cn: Json
           facts: string[]
+          facts_cn: string[]
           github_url: string
           id: number
           photos: Json
@@ -28,9 +31,12 @@ export type Database = {
         }
         Insert: {
           bio?: string
+          bio_cn?: string
           contact_email?: string
           experience?: Json
+          experience_cn?: Json
           facts?: string[]
+          facts_cn?: string[]
           github_url?: string
           id?: number
           photos?: Json
@@ -39,9 +45,12 @@ export type Database = {
         }
         Update: {
           bio?: string
+          bio_cn?: string
           contact_email?: string
           experience?: Json
+          experience_cn?: Json
           facts?: string[]
+          facts_cn?: string[]
           github_url?: string
           id?: number
           photos?: Json
@@ -738,41 +747,50 @@ export type Database = {
       posts: {
         Row: {
           content: string
+          content_cn: string
           created_at: string
           date: string
           description: string
+          description_cn: string
           id: string
           published: boolean
           reading_time: string
           slug: string
           tags: string[]
           title: string
+          title_cn: string
           updated_at: string
         }
         Insert: {
           content?: string
+          content_cn?: string
           created_at?: string
           date?: string
           description?: string
+          description_cn?: string
           id?: string
           published?: boolean
           reading_time?: string
           slug: string
           tags?: string[]
           title: string
+          title_cn?: string
           updated_at?: string
         }
         Update: {
           content?: string
+          content_cn?: string
           created_at?: string
           date?: string
           description?: string
+          description_cn?: string
           id?: string
           published?: boolean
           reading_time?: string
           slug?: string
           tags?: string[]
           title?: string
+          title_cn?: string
           updated_at?: string
         }
         Relationships: []
