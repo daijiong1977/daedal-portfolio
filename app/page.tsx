@@ -1,10 +1,25 @@
 import Link from 'next/link'
-import { posts } from './data/posts'
-import { projects } from './data/projects'
+import { supabaseServer } from './lib/supabase'
 
-export default function Home() {
-  const recentPosts = posts.slice(0, 4)
-  const featuredProjects = projects.filter((p) => p.featured)
+export const revalidate = 60
+
+export default async function Home() {
+  const [{ data: posts }, { data: projects }] = await Promise.all([
+    supabaseServer
+      .from('posts')
+      .select('slug, title, date')
+      .eq('published', true)
+      .order('date', { ascending: false })
+      .limit(4),
+    supabaseServer
+      .from('projects')
+      .select('id, name, description, github_url, url, tags')
+      .eq('featured', true)
+      .order('stars', { ascending: false }),
+  ])
+
+  const recentPosts = posts ?? []
+  const featuredProjects = projects ?? []
 
   return (
     <div className="max-w-2xl space-y-20">
@@ -79,8 +94,8 @@ export default function Home() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {featuredProjects.map((project) => (
             <a
-              key={project.name}
-              href={project.url ?? project.github ?? '#'}
+              key={project.id}
+              href={project.url ?? project.github_url ?? '#'}
               target="_blank"
               rel="noopener noreferrer"
               className="card-hover group block rounded-xl border border-[var(--card-border)] bg-[var(--card)] p-5 space-y-2"

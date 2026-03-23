@@ -1,14 +1,23 @@
-import { projects } from '../data/projects'
+import { supabaseServer } from '../lib/supabase'
 import type { Metadata } from 'next'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Projects',
   description: 'Open-source projects and side experiments.',
 }
 
-export default function ProjectsPage() {
-  const featured = projects.filter((p) => p.featured)
-  const others = projects.filter((p) => !p.featured)
+export default async function ProjectsPage() {
+  const { data: projects } = await supabaseServer
+    .from('projects')
+    .select('id, name, description, github_url, url, language, tags, stars, featured')
+    .order('featured', { ascending: false })
+    .order('stars', { ascending: false })
+
+  const all = projects ?? []
+  const featured = all.filter((p) => p.featured)
+  const others = all.filter((p) => !p.featured)
 
   return (
     <div>
@@ -32,17 +41,17 @@ export default function ProjectsPage() {
         <div className="grid gap-5 sm:grid-cols-2">
           {featured.map((project) => (
             <div
-              key={project.name}
+              key={project.id}
               className="card-hover border border-[var(--card-border)] rounded-xl p-6 bg-[var(--card)] space-y-4"
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h3 className="font-semibold text-[var(--foreground)] leading-tight">{project.name}</h3>
-                  <span className="text-xs text-[var(--muted)] font-mono">{project.year}</span>
+                  {project.stars > 0 && <span className="text-xs text-[var(--muted)] font-mono">★ {project.stars}</span>}
                 </div>
-                {project.github && (
+                {project.github_url && (
                   <a
-                    href={project.github}
+                    href={project.github_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="shrink-0 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
@@ -76,13 +85,13 @@ export default function ProjectsPage() {
           <div className="space-y-1">
             {others.map((project) => (
               <div
-                key={project.name}
+                key={project.id}
                 className="flex items-start justify-between gap-4 py-4 border-b border-[var(--border)] last:border-0"
               >
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-3">
                     <h3 className="font-medium text-[var(--foreground)]">{project.name}</h3>
-                    <span className="text-xs font-mono text-[var(--muted)]">{project.year}</span>
+                    {project.stars > 0 && <span className="text-xs font-mono text-[var(--muted)]">★ {project.stars}</span>}
                   </div>
                   <p className="text-sm text-[var(--muted)] leading-relaxed">{project.description}</p>
                   <div className="flex flex-wrap gap-1.5 pt-1">
@@ -93,9 +102,9 @@ export default function ProjectsPage() {
                     ))}
                   </div>
                 </div>
-                {project.github && (
+                {project.github_url && (
                   <a
-                    href={project.github}
+                    href={project.github_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="shrink-0 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors mt-1"
