@@ -42,10 +42,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]">
+      <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)] selection:bg-[var(--accent-soft)]">
         <LangProvider>
           <Nav />
-          <main className="flex-1 max-w-3xl mx-auto w-full px-6 py-12">
+          <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-10 sm:py-14">
             {children}
           </main>
           <Footer />

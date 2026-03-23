@@ -3,8 +3,8 @@ import Link from 'next/link'
 export default function Footer() {
   return (
     <footer className="border-t border-[var(--border)] mt-24">
-      <div className="max-w-3xl mx-auto px-6 py-10">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="max-w-5xl mx-auto px-6 py-10">
+        <div className="surface-card rounded-3xl px-6 py-6 sm:px-8 sm:py-7 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-[var(--muted)]">
             Made with care by{' '}
             <Link href="/about" className="text-[var(--foreground)] font-medium">
@@ -12,7 +12,7 @@ export default function Footer() {
             </Link>
           </p>
 
-          <div className="flex items-center gap-5 text-sm">
+          <div className="flex items-center gap-5 text-sm flex-wrap justify-center">
             <a
               href="https://github.com/daedaldai"
               target="_blank"
