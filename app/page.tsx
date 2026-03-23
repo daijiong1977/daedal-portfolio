@@ -1,65 +1,136 @@
-import Image from "next/image";
+import Link from 'next/link'
+import { posts } from './data/posts'
+import { projects } from './data/projects'
 
 export default function Home() {
+  const recentPosts = posts.slice(0, 4)
+  const featuredProjects = projects.filter((p) => p.featured)
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="max-w-2xl space-y-20">
+      {/* Hero */}
+      <section className="space-y-6 pt-4">
+        <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--card)] px-3 py-1 text-xs font-medium text-[var(--muted)]">
+          <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+          Available for new opportunities
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          <span className="gradient-text">Daedal Dai</span>
+        </h1>
+
+        <p className="text-lg text-[var(--muted)] leading-relaxed">
+          Software engineer specialising in distributed systems and developer tooling.
+          I build things that are fast, reliable, and hopefully a little bit elegant.
+        </p>
+
+        <div className="flex items-center gap-4">
+          <Link
+            href="/projects"
+            className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white transition-colors hover:opacity-90"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            View projects
+          </Link>
+          <Link
+            href="/about"
+            className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--card)]"
           >
-            Documentation
-          </a>
+            About me
+          </Link>
         </div>
-      </main>
+      </section>
+
+      {/* Recent Writing */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold tracking-tight">Recent Writing</h2>
+          <Link href="/blog" className="text-sm text-[var(--accent)] hover:underline">
+            All posts →
+          </Link>
+        </div>
+
+        <div className="space-y-1">
+          {recentPosts.map((post) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="group flex items-baseline justify-between gap-4 rounded-lg px-2 py-2.5 -mx-2 transition-colors hover:bg-[var(--card)]"
+            >
+              <span className="font-medium group-hover:text-[var(--accent)] transition-colors">
+                {post.title}
+              </span>
+              <time className="shrink-0 font-mono text-xs text-[var(--muted)]">
+                {post.date}
+              </time>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Open Source */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold tracking-tight">Open Source</h2>
+          <Link href="/projects" className="text-sm text-[var(--accent)] hover:underline">
+            All projects →
+          </Link>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {featuredProjects.map((project) => (
+            <a
+              key={project.name}
+              href={project.url ?? project.github ?? '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card-hover group block rounded-xl border border-[var(--card-border)] bg-[var(--card)] p-5 space-y-2"
+            >
+              <h3 className="font-semibold group-hover:text-[var(--accent)] transition-colors">
+                {project.name}
+              </h3>
+              <p className="text-sm text-[var(--muted)] leading-relaxed">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {project.tags.slice(0, 3).map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-[var(--background)] border border-[var(--border)] px-2 py-0.5 text-xs text-[var(--muted)]"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* Current Stack */}
+      <section className="space-y-6">
+        <h2 className="text-lg font-semibold tracking-tight">Current Stack</h2>
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+          {[
+            { label: 'Languages', items: ['Go', 'Rust', 'TypeScript', 'Python'] },
+            { label: 'Backend', items: ['gRPC', 'PostgreSQL', 'Redis', 'Kafka'] },
+            { label: 'Infra', items: ['Kubernetes', 'Terraform', 'AWS', 'Prometheus'] },
+            { label: 'Frontend', items: ['Next.js', 'React', 'Tailwind', 'tRPC'] },
+          ].map((group) => (
+            <div key={group.label} className="space-y-2">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-[var(--muted)]">
+                {group.label}
+              </h3>
+              <ul className="space-y-1">
+                {group.items.map((item) => (
+                  <li key={item} className="text-sm text-[var(--foreground)]/80">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
-  );
+  )
 }
